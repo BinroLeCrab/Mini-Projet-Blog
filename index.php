@@ -8,6 +8,9 @@
     </head>
     <body>
         <h1>Le blog ! </h1>
+        <?php
+
+        ?>
     </body>
 </html>
 
