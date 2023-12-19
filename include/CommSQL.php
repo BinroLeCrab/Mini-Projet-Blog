@@ -44,19 +44,74 @@ function traitelogin($log, $mdp) {
                 'login' => $resulCom['login']
             ];
 
-            header('location:index.php');
+            //fermer
+            $db = null;     
+            return 'location:index.php';
 
         } else {
-            header('location:index.php?logerr');
+            //fermer
+            $db = null;
+            return 'location:index.php?logerr';
         }
 
     } else {
-        header('location:index.php?logerr');
+        //fermer
+        $db = null;
+        return 'location:index.php?logerr';
     }
+
+}
+
+function billet($id) {
+    try
+    {
+        $db = new PDO(dsn, user, pwd);
+    }
+    catch (PDOException $e)
+    {
+        die("Erreur à l'ouverture ! :".$e->getmessage());
+    }
+
+    $stmt=$db->prepare('SELECT * FROM billets AS bi INNER JOIN utilisateurs AS us ON bi.id_user = us.id WHERE bi.id_billet = :id;');
+    $stmt->bindValue(':id', $id);
+
+    $stmt->execute();
+
+    $resulCom=$stmt->fetchAll();
 
     //fermer
 	$db = null;
 
+    if (count($resulCom)==1)
+    {
+        return $resulCom[0];
+    };
+}
+
+function billetListe() {
+
+    try
+    {
+        $db = new PDO(dsn, user, pwd);
+    }
+    catch (PDOException $e)
+    {
+        die("Erreur à l'ouverture ! :".$e->getmessage());
+    }
+
+    $stmt=$db->prepare('SELECT * FROM billets ;');
+
+    $stmt->execute();
+
+    $resulCom=$stmt->fetchAll();
+
+    //fermer
+	$db = null;
+
+    if (count($resulCom)>0)
+    {
+        return $resulCom;
+    };
 }
 
             

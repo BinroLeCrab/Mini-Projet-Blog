@@ -14,4 +14,33 @@ function formConnexion() {
     return $reponse;
 }
 
+function echoListeBillet() {
+    $reponse= "";
+    $reponse.= "<section>\n";
+    $billets = billetListe();
+    foreach ($billets as $billet) {
+        $reponse.=sprintf("    <a href=\"index.php?id_billet=%s\">\n", $billet['id_billet']);
+        $reponse.=sprintf("        <h2>%s</h2>\n", $billet['titre_billet']);
+        $reponse.=sprintf("        <p>%s</p>\n", $billet['content_billet']);
+        $reponse.= "    </a>\n";
+    }
+    $reponse.= "</section>\n";
+
+    return $reponse;
+}
+
+function echoBillet($id) {
+    $reponse= "";
+    $reponse.= "<section>\n";
+    $billet = billet($id);
+    
+    $reponse.=sprintf(" <h1>%s</h1>\n", $billet['titre_billet']);
+    $reponse.=sprintf(" <p>%s</p>\n", $billet["nom"]);
+    $reponse.=sprintf(" <p>%s</p>\n", $billet['content_billet']);
+
+    $reponse.= "</section>\n";
+
+    return $reponse;
+}
+
 ?>

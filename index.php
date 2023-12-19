@@ -14,15 +14,14 @@
         <link rel="stylesheet" type="text/css" href="style/style.css"/>
     </head>
     <body>
-        <h1>Le blog ! </h1>
+        <h1>Le blog !</h1>
         <?php
             // $mdpHash = password_hash("toto01", PASSWORD_DEFAULT);
             // echo $mdpHash;
 
-        
             if (isset($_GET["log"])) {
                 
-                traitelogin($_POST["login"], $_POST["mdp"]);
+                header(traitelogin($_POST["login"], $_POST["mdp"]));
 
             } else if (isset($_GET["conn"])) {
 
@@ -38,12 +37,25 @@
                 session_destroy();
                 header('location:index.php');
 
-            } else if (isset($_SESSION["user"])) {
+            } else {
+                
+                if (isset($_SESSION["user"])) {
+
                 echo "<h2>Bonjour ".$_SESSION["user"]["nom"]."</h2>\n";
                 echo "<a href=\"index.php?deco\">Se déconnecter</a>\n";
-            }
-            else {
+
+                } else {
+
                 echo "<a href=\"index.php?conn\">Se connecter</a>\n";
+
+                }
+
+                if (isset($_GET['id_billet'])) {
+                    echo echoBillet($_GET['id_billet']);
+                } else {
+                    echo echoListeBillet();
+                }
+
             }
         ?>
     </body>
