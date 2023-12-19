@@ -62,6 +62,29 @@ function traitelogin($log, $mdp) {
 
 }
 
+function traitebillet($titre, $content, $id_user) {
+
+    //ouvrir
+    try
+    {
+        $db = new PDO(dsn, user, pwd);
+    }
+    catch (PDOException $e)
+    {
+        die("Erreur à l'ouverture ! :".$e->getmessage());
+    }
+
+    //requeter
+    $stmt = $db->prepare("INSERT INTO billets (id_user, titre_billet, content_billet) VALUES (:user, :tit, :cont);");
+    $stmt->bindValue(':user',$id_user);
+    $stmt->bindValue(':tit',$titre);
+    $stmt->bindValue(':cont',$content);
+
+    $stmt->execute();
+
+    return 'location:index.php';
+}
+
 function billet($id) {
     try
     {

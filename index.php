@@ -12,6 +12,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
         <title>Mini Projet Blog</title>
         <link rel="stylesheet" type="text/css" href="style/style.css"/>
+        <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     </head>
     <body>
         <h1>Le blog !</h1>
@@ -37,6 +38,10 @@
                 session_destroy();
                 header('location:index.php');
 
+            } else if (isset($_GET['AddBi'])){
+                echo "<p>Votre billet va être publié !</p>\n";
+
+                header(traitebillet($_POST['titre'], $_POST['content'], $_SESSION['user']['id']));
             } else {
                 
                 if (isset($_SESSION["user"])) {
@@ -50,14 +55,28 @@
 
                 }
 
-                if (isset($_GET['id_billet'])) {
+                if (isset($_GET['newBi']) && isset($_SESSION["user"])){
+
+                    echo formBillet();
+
+                } else if (isset($_GET['newBi'])) {
+                    echo "<p>connecter vous pour publier un billet</p>\n";
+                }else if (isset($_GET['id_billet'])) {
+
                     echo echoBillet($_GET['id_billet']);
+
                 } else {
                     echo echoListeBillet();
                 }
 
             }
         ?>
+
+    <script>
+        tinymce.init({
+            selector: '#content_bi'
+        });
+    </script>
     </body>
 </html>
 
