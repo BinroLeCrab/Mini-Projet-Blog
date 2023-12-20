@@ -39,9 +39,17 @@
                 header('location:index.php');
 
             } else if (isset($_GET['AddBi'])){
+
                 echo "<p>Votre billet va être publié !</p>\n";
 
                 header(traitebillet($_POST['titre'], $_POST['content'], $_SESSION['user']['id']));
+
+            } else if (isset($_GET['AddCom'])){
+
+                echo "<p>Votre commentaire va être publié !</p>\n";
+
+                header(traitecomment($_GET['id_billet'], $_POST['content'], $_SESSION['user']['id']));
+
             } else {
                 
                 if (isset($_SESSION["user"])) {

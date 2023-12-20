@@ -82,7 +82,40 @@ function traitebillet($titre, $content, $id_user) {
 
     $stmt->execute();
 
+    //fermer
+    $db = null;
+
     return 'location:index.php';
+}
+
+function traitecomment($id_billet, $content, $id_user) {
+
+    if ($content != "") {
+        //ouvrir
+        try
+        {
+            $db = new PDO(dsn, user, pwd);
+        }
+        catch (PDOException $e)
+        {
+            die("Erreur à l'ouverture ! :".$e->getmessage());
+        }
+
+        //requeter
+        $stmt = $db->prepare("INSERT INTO commentaires (id_user, id_billet, content_comment) VALUES (:user, :bi, :cont);");
+        $stmt->bindValue(':user',$id_user);
+        $stmt->bindValue(':bi',$id_billet);
+        $stmt->bindValue(':cont',$content);
+
+        $stmt->execute();
+
+        //fermer
+        $db = null;
+    }
+
+    return 'location:index.php?id_billet='.$id_billet;
+
+    
 }
 
 function billet($id) {
@@ -137,7 +170,30 @@ function billetListe() {
     };
 }
 
-            
+function commentaires ($id_billet) {
+
+    try
+    {
+        $db = new PDO(dsn, user, pwd);
+    }
+    catch (PDOException $e)
+    {
+        die("Erreur à l'ouverture ! :".$e->getmessage());
+    }
+
+    $stmt=$db->prepare('SELECT * FROM commentaires AS co INNER JOIN utilisateurs AS us ON co.id_user = us.id WHERE co.id_billet = :id;');
+    $stmt->bindValue(':id', $id_billet);
+
+    $stmt->execute();
+
+    $resulCom=$stmt->fetchAll();
+
+    //fermer
+	$db = null;
+
+    return $resulCom;
+
+}
 
 ?>
 
