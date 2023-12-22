@@ -41,7 +41,8 @@ function traitelogin($log, $mdp) {
             $_SESSION['user'] = [
                 'id' => $resulCom['id'],
                 'nom' => $resulCom['nom'],
-                'login' => $resulCom['login']
+                'login' => $resulCom['login'],
+                'autority' => $resulCom['autority']
             ];
 
             //fermer
@@ -62,7 +63,7 @@ function traitelogin($log, $mdp) {
 
 }
 
-function traitebillet($titre, $content, $id_user) {
+function traitebillet($titre, $content, $pitch, $id_user) {
 
     //ouvrir
     try
@@ -75,10 +76,11 @@ function traitebillet($titre, $content, $id_user) {
     }
 
     //requeter
-    $stmt = $db->prepare("INSERT INTO billets (id_user, titre_billet, content_billet) VALUES (:user, :tit, :cont);");
+    $stmt = $db->prepare("INSERT INTO billets (id_user, titre_billet, content_billet, pitch) VALUES (:user, :tit, :cont, :pitch);");
     $stmt->bindValue(':user',$id_user);
     $stmt->bindValue(':tit',$titre);
     $stmt->bindValue(':cont',$content);
+    $stmt->bindValue(':pitch',$pitch);
 
     $stmt->execute();
 
@@ -113,9 +115,34 @@ function traitecomment($id_billet, $content, $id_user) {
         $db = null;
     }
 
-    return 'location:index.php?id_billet='.$id_billet;
+    return 'location:index.php?id_billet='.$id_billet;   
+}
 
-    
+function supprBillet($id_billet, $org) {
+
+    try
+    {
+        $db = new PDO(dsn, user, pwd);
+    }
+    catch (PDOException $e)
+    {
+        die("Erreur à l'ouverture ! :".$e->getmessage());
+    }
+
+    //requeter
+    $stmt = $db->prepare("DELETE FROM billets WHERE id_billet = :id; DELETE FROM commentaires WHERE id_billet = :id;");
+    $stmt->bindValue(':id',$id_billet);
+
+    $stmt->execute();
+
+    //fermer
+    $db = null;
+
+    if ($org != 0){
+        return 'location:index.php'; 
+    } else {
+        return 'location:index?adminPan';
+    }  
 }
 
 function billet($id) {
@@ -141,7 +168,10 @@ function billet($id) {
     if (count($resulCom)==1)
     {
         return $resulCom[0];
-    };
+
+    } else {
+        header('location:index.php');
+    }
 }
 
 function billetListe() {
@@ -160,6 +190,38 @@ function billetListe() {
     $stmt->execute();
 
     $resulCom=$stmt->fetchAll();
+
+    //fermer
+	$db = null;
+
+    if (count($resulCom)>0)
+    {
+        return $resulCom;
+    };
+}
+
+function adminPan() {
+
+    try
+    {
+        $db = new PDO(dsn, user, pwd);
+    }
+    catch (PDOException $e)
+    {
+        die("Erreur à l'ouverture ! :".$e->getmessage());
+    }
+
+    $bil=$db->prepare('SELECT * FROM billets AS bi INNER JOIN utilisateurs AS us ON bi.id_user = us.id ORDER BY date DESC;');
+    $bil->execute();
+    $resulCom['billet']=$bil->fetchAll();
+
+    $user=$db->prepare('SELECT * FROM utilisateurs;');
+    $user->execute();
+    $resulCom['user']=$user->fetchAll();
+
+    $com=$db->prepare('SELECT * FROM commentaires AS co INNER JOIN utilisateurs AS us ON co.id_user = us.id INNER JOIN billets AS bi ON bi.id_billet = co.id_billet ORDER BY date_comment DESC;');
+    $com->execute();
+    $resulCom['commentaire']=$com->fetchAll();
 
     //fermer
 	$db = null;
@@ -193,6 +255,64 @@ function commentaires ($id_billet) {
 
     return $resulCom;
 
+}
+
+function getCom ($id) {
+
+    try
+    {
+        $db = new PDO(dsn, user, pwd);
+    }
+    catch (PDOException $e)
+    {
+        die("Erreur à l'ouverture ! :".$e->getmessage());
+    }
+
+    $stmt=$db->prepare('SELECT * FROM commentaires AS co INNER JOIN utilisateurs AS us ON co.id_user = us.id WHERE co.id_comment = :id;');
+    $stmt->bindValue(':id', $id);
+
+    $stmt->execute();
+
+    $resulCom=$stmt->fetchAll();
+
+    //fermer
+	$db = null;
+
+    if (count($resulCom)==1)
+    {
+        return $resulCom[0];
+    } else {
+        header('location:index.php');
+    }
+
+}
+
+function supprComment($id_comment, $org) {
+
+    try
+    {
+        $db = new PDO(dsn, user, pwd);
+    }
+    catch (PDOException $e)
+    {
+        die("Erreur à l'ouverture ! :".$e->getmessage());
+    }
+
+    //requeter
+    $stmt = $db->prepare("DELETE FROM commentaires WHERE id_comment = :id;");
+    $stmt->bindValue(':id',$id_comment);
+
+    $stmt->execute();
+
+    //fermer
+    $db = null;
+
+    if ($org != 0){
+        return 'location:index.php?id_billet='.$org;
+    } else {
+        return 'location:index?adminPan';
+    }
+    
 }
 
 ?>

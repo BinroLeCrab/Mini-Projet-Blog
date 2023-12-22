@@ -40,26 +40,74 @@
 
             } else if (isset($_GET['AddBi'])){
 
-                echo "<p>Votre billet va être publié !</p>\n";
+                if (isset($_POST['titre']) && isset($_POST['pitch']) && isset($_SESSION['user'])) {
 
-                header(traitebillet($_POST['titre'], $_POST['content'], $_SESSION['user']['id']));
+                    echo "<p>Votre billet va être publié !</p>\n";
+                    header(traitebillet($_POST['titre'], $_POST['content'], $_POST['pitch'], $_SESSION['user']['id']));
+
+                } else {
+                    header('location:index.php');
+                }
+
+            } else if (isset($_GET['SuprrCom']) && isset($_GET['id_comm']) && isset($_SESSION['user'])){
+
+                $comm = getCom($_GET['id_comm']);
+
+                if (($_SESSION['user']['id'] == $comm['id']) || ($_SESSION['user']['autority'] == 317)) {
+                    echo "<p>le commentaire ".$comm['id_comment']."</p>\n";
+                    if (isset($_GET['Admin'])){
+                        header(supprComment($_GET['id_comm'], 0));
+                    } else {
+                        header(supprComment($_GET['id_comm'], $comm['id_billet']));
+                    }
+                } else {
+                    header('location:index.php');
+                }
+
+            } else if (isset($_GET['SuprrBi']) && isset($_GET['id_billet']) && isset($_SESSION['user'])){
+
+                $billet = billet($_GET['id_billet']);
+
+                if (($_SESSION['user']['id'] == $billet['id']) || ($_SESSION['user']['autority'] == 317)) {
+                    echo "<p>le billet ".$billet['id_billet']."</p>\n";
+
+                    if (isset($_GET['Admin'])){
+                        header(supprBillet($_GET['id_billet'], 0));
+                    } else {
+                        header(supprBillet($_GET['id_billet'], 1));
+                    }
+                } else {
+                    header('location:index.php');
+                }
 
             } else if (isset($_GET['AddCom'])){
 
                 echo "<p>Votre commentaire va être publié !</p>\n";
 
-                header(traitecomment($_GET['id_billet'], $_POST['content'], $_SESSION['user']['id']));
+                header(traitecomment($_GET['id_billet'], htmlspecialchars($_POST['content']), $_SESSION['user']['id']));
+
+            } else if (isset($_GET['adminPan'])){
+
+                if (isset($_SESSION['user']) && ($_SESSION['user']['autority'] == 317)) {
+                    echo adminPannel();
+                } else {
+                    header('location:index.php');
+                }
 
             } else {
                 
                 if (isset($_SESSION["user"])) {
 
-                echo "<h2>Bonjour ".$_SESSION["user"]["nom"]."</h2>\n";
-                echo "<a href=\"index.php?deco\">Se déconnecter</a>\n";
+                    echo "<h2>Bonjour ".$_SESSION["user"]["nom"]."</h2>\n";
+                    echo "<a href=\"index.php?deco\">Se déconnecter</a>\n";
+
+                    if ($_SESSION['user']['autority'] == 317) {
+                        echo "<a href=\"index.php?adminPan\">Admin pannel</a>\n";
+                    }
 
                 } else {
 
-                echo "<a href=\"index.php?conn\">Se connecter</a>\n";
+                    echo "<a href=\"index.php?conn\">Se connecter</a>\n";
 
                 }
 
@@ -69,7 +117,7 @@
 
                 } else if (isset($_GET['newBi'])) {
                     echo "<p>connecter vous pour publier un billet</p>\n";
-                }else if (isset($_GET['id_billet'])) {
+                } else if (isset($_GET['id_billet'])) {
 
                     echo echoBillet($_GET['id_billet']);
 
