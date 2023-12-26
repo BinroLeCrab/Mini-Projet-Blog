@@ -1,11 +1,121 @@
-.Billet {
+
+/** -----------------------GENEREAUX--------------------- */
+
+*,
+*::before,
+*::after{
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #FFFCF5;
+    font-family: 'Noto Sans', sans-serif;
+}
+
+p, a {
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+/** -----------------------NAV--------------------- */
+
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    display: grid;
+    grid-template-columns: fit-content(100%) 1fr repeat(4, fit-content(100%));
+    grid-template-areas: "lo . ac ar ad na co";
+    align-items: center;
+
+    width: 100vw;
+    height: fit-content;
+    padding: 10px 20px;
     background-color: #FFEBD1;
+}
+
+nav > * {
+    margin: 0px 10px;
+}
+
+
+nav > #ac {
+    grid-area: ac;
+}
+
+#logo {
+    grid-area: lo;
+
+    font-family: 'Yellowtail', cursive;
+    font-size: 2rem;
+    color: black;
+    text-decoration: none;
+    margin: 0px;
+}
+
+nav > a {
+    color: black;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+nav > #arch {
+    grid-area: ar;
+}
+
+nav > #na {
+    grid-area: na;
+}
+
+nav > #admpan {
+    grid-area: ad;
+}
+
+nav > #co {
+    grid-area: co;
+    color: rgba(0, 0, 0, 0.8);
+    font-weight: 500;
+    margin: 0px 0px 0px 10px;
+}
+
+.navhover {
+    overflow: hidden;
+}
+
+.navhover::after {
+    display: block;
+    content: "";
+    height: 2px;
+    width: 0%;
+    margin-left: 0%;
+    background-color: black;
+    transition: 0.3s;
+}
+
+.navhover:hover {
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.navhover:hover::after {
+    width: 100%;
+    margin-left: 70%;
+}
+
+/** -----------------------MAIN--------------------- */
+
+main {
+    margin-top: 100px;
+}
+
+.Billet {
+    background-color: #fff9f2;
 }
 
 .BilletCards {
     display: block;
     text-decoration: none;
-    background-color: #FFEBD1;
+    background-color: #fff9f2;
 }
 
 textarea {

@@ -98,11 +98,13 @@ function echoBillet($id) {
     }
     $reponse.= "</section>\n";
 
-    $reponse.= "<button class=\"\" type=\"button\" id=\"show\">Voir les commentaires</button>\n";
-
-    $reponse.= "<section id=\"comment\" class=\"commentaires\">\n";
     $comments = commentaires($id);
+    $reponse.= "<section class=\"commentaires\">\n";
     if (count($comments)>0) {
+
+        $reponse.= "<button class=\"\" type=\"button\" id=\"show\">Voir les commentaires</button>\n";
+
+        $reponse.= "<article id=\"comment\">\n";
 
         foreach ($comments as $comment) {
             $reponse.=" <div>\n";
@@ -115,6 +117,8 @@ function echoBillet($id) {
 
             $reponse.=" </div>\n";
         }
+
+        $reponse.= "</article>\n";
         
     } else {
         $reponse.= "    <p>Il n'y a pas encore de commentaires pour ce billet</p>\n";
@@ -136,14 +140,13 @@ function adminPannel(){
 
     $BD = adminPan();
 
-    $reponse.= "    <main>\n";
-    $reponse.= "        <h2>Admin Pannel</h2>\n";
-    $reponse.=sprintf("        <p>Bienvenu sur votre pannel administrateur %s</p>\n", $_SESSION['user']['nom']);
-    $reponse.="         <a href=\"index.php?deco\">Se déconnecter</a>\n";
+    $reponse.= "    <h1>Admin Pannel</h1>\n";
+    $reponse.=sprintf("     <p>Bienvenu sur votre pannel administrateur %s</p>\n", $_SESSION['user']['nom']);
+    $reponse.= "    <section>\n";
     $reponse.= "        <a href=\"index.php\">Retour à l'accueil</a>\n";
     $reponse.="         <br>\n";
 
-    $reponse.="         <section>\n";
+    $reponse.="         <article>\n";
     $reponse.="             <h3>Utilisateurs</h3>\n";
     $reponse.="             <table>\n";
     $reponse.="                 <thead>\n";
@@ -158,20 +161,20 @@ function adminPannel(){
     $reponse.="                 <tbody>\n";
 
     foreach ($BD['user'] as $value) {
-        $reponse.= '                        <tr>';
-        $reponse.=sprintf('                            <td>%s</td>', $value['id']);
-        $reponse.=sprintf('                            <td>%s</td>', $value['login']);
-        $reponse.=sprintf('                            <td>%s</td>', $value['nom']);
-        $reponse.=sprintf('                            <td>%s</td>', $value['motpass']);
-        $reponse.=sprintf('                            <td>%s</td>', $value['autority']);
-        $reponse.= '                        </tr>';
+        $reponse.= "                        <tr>\n";
+        $reponse.=sprintf("                            <td>%s</td>\n", $value["id"]);
+        $reponse.=sprintf("                            <td>%s</td>\n", $value["login"]);
+        $reponse.=sprintf("                            <td>%s</td>\n", $value["nom"]);
+        $reponse.=sprintf("                            <td>%s</td>\n", $value["motpass"]);
+        $reponse.=sprintf("                            <td>%s</td>\n", $value["autority"]);
+        $reponse.= "                        </tr>\n";
     }
 
     $reponse.="                 </tbody>\n";
     $reponse.="             </table>\n";
-    $reponse.="         </section>\n";
+    $reponse.="         </article>\n";
 
-    $reponse.="         <section>\n";
+    $reponse.="         <article>\n";
     $reponse.="             <h3>Billets</h3>\n";
     $reponse.="             <table>\n";
     $reponse.="                 <thead>\n";
@@ -188,22 +191,22 @@ function adminPannel(){
     $reponse.="                 <tbody>\n";
 
     foreach ($BD['billet'] as $value) {
-        $reponse.= '                        <tr>';
-        $reponse.=sprintf('                            <td>%s</td>', $value['id_billet']);
-        $reponse.=sprintf('                            <td>%s</td>', $value['nom']);
-        $reponse.=sprintf('                            <td>%s</td>', date('d/m/Y - H:i', strtotime($value['date'])));
-        $reponse.=sprintf('                            <td>%s</td>', $value['titre_billet']);
-        $reponse.=sprintf('                            <td>%s</td>', substr($value['pitch'], 0, 100));
-        $reponse.=sprintf('                            <td>%s</td>', substr($value['content_billet'], 0, 300));
-        $reponse.=sprintf("                            <td><a href=\"index.php?SuprrBi&id_billet=%s&Admin\">Supprimer</a></td>\n", $value['id_billet']);
-        $reponse.= '                        </tr>';
+        $reponse.= "                        <tr>\n";
+        $reponse.=sprintf("                            <td>%s</td>\n", $value["id_billet"]);
+        $reponse.=sprintf("                            <td>%s</td>\n", $value["nom"]);
+        $reponse.=sprintf("                            <td>%s</td>\n", date("d/m/Y - H:i", strtotime($value["date"])));
+        $reponse.=sprintf("                            <td>%s</td>\n", $value["titre_billet"]);
+        $reponse.=sprintf("                            <td>%s</td>\n", substr($value["pitch"], 0, 100));
+        $reponse.=sprintf("                            <td>%s</td>\n", substr($value["content_billet"], 0, 300));
+        $reponse.=sprintf("                            <td><a href=\"index.php?SuprrBi&id_billet=%s&Admin\">Supprimer</a></td>\n", $value["id_billet"]);
+        $reponse.= "                        </tr>\n";
     }
 
     $reponse.="                 </tbody>\n";
     $reponse.="             </table>\n";
-    $reponse.="         </section>\n";
+    $reponse.="         </article>\n";
 
-    $reponse.="         <section>\n";
+    $reponse.="         <article>\n";
     $reponse.="             <h3>Commentaires</h3>\n";
     $reponse.="             <table>\n";
     $reponse.="                 <thead>\n";
@@ -219,21 +222,21 @@ function adminPannel(){
     $reponse.="                 <tbody>\n";
 
     foreach ($BD['commentaire'] as $value) {
-        $reponse.= '                        <tr>';
-        $reponse.=sprintf('                            <td>%s</td>', $value['id_comment']);
-        $reponse.=sprintf('                            <td>%s</td>', $value['nom']);
-        $reponse.=sprintf('                            <td>%s</td>', date('d/m/Y - H:i', strtotime($value['date_comment'])));
-        $reponse.=sprintf('                            <td>%s</td>', $value['titre_billet']);
-        $reponse.=sprintf('                            <td>%s</td>', $value['content_comment']);
-        $reponse.=sprintf("                            <td><a href=\"index.php?SuprrCom&id_comm=%s&Admin\">Supprimer</a></td>\n", $value['id_comment']);
-        $reponse.= '                        </tr>';
+        $reponse.= "                        <tr>\n";
+        $reponse.=sprintf("                            <td>%s</td>\n", $value["id_comment"]);
+        $reponse.=sprintf("                            <td>%s</td>\n", $value["nom"]);
+        $reponse.=sprintf("                            <td>%s</td>\n", date("d/m/Y - H:i", strtotime($value["date_comment"])));
+        $reponse.=sprintf("                            <td>%s</td>\n", $value["titre_billet"]);
+        $reponse.=sprintf("                            <td>%s</td>\n", $value["content_comment"]);
+        $reponse.=sprintf("                            <td><a href=\"index.php?SuprrCom&id_comm=%s&Admin\">Supprimer</a></td>\n", $value["id_comment"]);
+        $reponse.= "                        </tr>\n";
     }
 
     $reponse.="                 </tbody>\n";
     $reponse.="             </table>\n";
-    $reponse.="         </section>\n";
+    $reponse.="         </article>\n";
 
-    $reponse.= "    </main>\n";
+    $reponse.= "    </section>\n";
 
     return $reponse;
 }
