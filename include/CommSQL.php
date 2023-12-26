@@ -185,7 +185,33 @@ function billetListe() {
         die("Erreur à l'ouverture ! :".$e->getmessage());
     }
 
-    $stmt=$db->prepare('SELECT * FROM billets ;');
+    $stmt=$db->prepare('SELECT * FROM billets ORDER BY date DESC;');
+
+    $stmt->execute();
+
+    $resulCom=$stmt->fetchAll();
+
+    //fermer
+	$db = null;
+
+    if (count($resulCom)>0)
+    {
+        return $resulCom;
+    };
+}
+
+function billetListeAcc() {
+
+    try
+    {
+        $db = new PDO(dsn, user, pwd);
+    }
+    catch (PDOException $e)
+    {
+        die("Erreur à l'ouverture ! :".$e->getmessage());
+    }
+
+    $stmt=$db->prepare('SELECT * FROM billets ORDER BY date DESC LIMIT 3;');
 
     $stmt->execute();
 

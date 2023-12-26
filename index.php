@@ -40,7 +40,7 @@
 
             } else if (isset($_GET['AddBi'])){
 
-                if (isset($_POST['titre']) && isset($_POST['pitch']) && isset($_SESSION['user'])) {
+                if (isset($_POST['titre']) && isset($_POST['pitch']) && (isset($_SESSION["user"]) && ($_SESSION['user']['autority'] == 317))) {
 
                     echo "<p>Votre billet va être publié !</p>\n";
                     header(traitebillet($_POST['titre'], $_POST['content'], $_POST['pitch'], $_SESSION['user']['id']));
@@ -111,28 +111,38 @@
 
                 }
 
-                if (isset($_GET['newBi']) && isset($_SESSION["user"])){
+                if (isset($_GET['newBi']) && (isset($_SESSION["user"]) && ($_SESSION['user']['autority'] == 317))){
 
                     echo formBillet();
 
                 } else if (isset($_GET['newBi'])) {
-                    echo "<p>connecter vous pour publier un billet</p>\n";
+
+                    header('location:index.php');
+
                 } else if (isset($_GET['id_billet'])) {
 
                     echo echoBillet($_GET['id_billet']);
 
+                } else if (isset($_GET['archive'])) {
+
+                    echo "<a href=\"index.php\">Retour à l'accueil</a>\n";
+                    echo echoArchive();
+
                 } else {
+                    
+                    echo "<a href=\"index.php?archive\">Archives</a>\n";
                     echo echoListeBillet();
                 }
 
             }
         ?>
 
-    <script>
-        tinymce.init({
-            selector: '#content_bi'
-        });
-    </script>
+        <script>
+            tinymce.init({
+                selector: '#content_bi'
+            });
+        </script>
+        <script type="text/javascript" src="js/script.js"></script>
     </body>
 </html>
 
@@ -149,3 +159,4 @@
 <!-- $test = ['coucou' => 'test', 'blabla' => 'ça marche'];
 echo $test['coucou'];
 echo $test['blabla']; -->
+

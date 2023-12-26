@@ -45,6 +45,26 @@ function formulaireComm($id) {
 function echoListeBillet() {
     $reponse= "";
     $reponse.= "<section>\n";
+    $billets = billetListeAcc();
+    foreach ($billets as $billet) {
+        $reponse.=sprintf("    <a class=\"BilletCards\" href=\"index.php?id_billet=%s\">\n", $billet['id_billet']);
+        $reponse.=sprintf("        <h2>%s</h2>\n", $billet['titre_billet']);
+        $reponse.=sprintf("        <p>%s</p>\n", $billet['pitch']);
+        $reponse.= "    </a>\n";
+    }
+
+    if (isset($_SESSION["user"]) && ($_SESSION['user']['autority'] == 317)) {
+        $reponse.= "    <a href=\"index.php?newBi\">Ajouter un billet</a>\n";
+    }
+
+    $reponse.= "</section>\n";
+
+    return $reponse;
+}
+
+function echoArchive() {
+    $reponse= "";
+    $reponse.= "<section>\n";
     $billets = billetListe();
     foreach ($billets as $billet) {
         $reponse.=sprintf("    <a class=\"BilletCards\" href=\"index.php?id_billet=%s\">\n", $billet['id_billet']);
@@ -52,7 +72,11 @@ function echoListeBillet() {
         $reponse.=sprintf("        <p>%s</p>\n", $billet['pitch']);
         $reponse.= "    </a>\n";
     }
-    $reponse.= "    <a href=\"index.php?newBi\">Ajouter un billet</a>\n";
+
+    if (isset($_SESSION["user"]) && ($_SESSION['user']['autority'] == 317)) {
+        $reponse.= "    <a href=\"index.php?newBi\">Ajouter un billet</a>\n";
+    }
+
     $reponse.= "</section>\n";
 
     return $reponse;
@@ -73,6 +97,8 @@ function echoBillet($id) {
         $reponse.=sprintf(" <a href=\"index.php?SuprrBi&id_billet=%s\">Supprimer</a>\n", $id);
     }
     $reponse.= "</section>\n";
+
+    $reponse.= "<button class=\"\" type=\"button\" id=\"show\">Voir les commentaires</button>\n";
 
     $reponse.= "<section id=\"comment\" class=\"commentaires\">\n";
     $comments = commentaires($id);
