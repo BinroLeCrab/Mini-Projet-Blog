@@ -10,6 +10,25 @@ function formConnexion() {
     $reponse.=" <input type=\"password\" id=\"mdp\" name=\"mdp\" required/><br>\n";
     $reponse.=" <input type=\"submit\" value=\"Se connecter\"/><br>\n";
     $reponse.="</form>\n";
+    $reponse.="<a href=\"index.php?newuser\">Créer un compte</a>\n";
+    
+    return $reponse;
+}
+
+function formInscription() {
+    $reponse= "";
+    
+    $reponse.="<form action=\"index.php?incription\" method=\"post\">\n";
+    $reponse.=" <label for=\"name\">Votre nom d'utilisateur :</label><br>\n";
+    $reponse.=" <input type=\"text\" id=\"name\" name=\"name\" required/><br>\n";
+    $reponse.=" <label for=\"mail\">Votre adresse mail :</label><br>\n";
+    $reponse.=" <input type=\"text\" id=\"mail\" name=\"mail\" required/><br>\n";
+    $reponse.=" <label for=\"login\">Votre login :</label><br>\n";
+    $reponse.=" <input type=\"text\" id=\"login\" name=\"login\" required/><br>\n";
+    $reponse.=" <label for=\"mdp\">Votre mot de passe :</label><br>\n";
+    $reponse.=" <input type=\"password\" id=\"mdp\" name=\"mdp\" required/><br>\n";
+    $reponse.=" <input type=\"submit\" value=\"Créer un compte\"/><br>\n";
+    $reponse.="</form>\n";
     
     return $reponse;
 }
@@ -136,6 +155,7 @@ function echoBillet($id) {
 }
 
 function adminPannel(){
+    
     $reponse = "";
 
     $BD = adminPan();
@@ -154,6 +174,7 @@ function adminPannel(){
     $reponse.="                         <th>Id User</th>\n";
     $reponse.="                         <th>Login</th>\n";
     $reponse.="                         <th>Nom</th>\n";
+    $reponse.="                         <th>Mail</th>\n";
     $reponse.="                         <th>Mots de passe</th>\n";
     $reponse.="                         <th>Autorité</th>\n";
     $reponse.="                     </tr>\n";
@@ -165,8 +186,13 @@ function adminPannel(){
         $reponse.=sprintf("                            <td>%s</td>\n", $value["id"]);
         $reponse.=sprintf("                            <td>%s</td>\n", $value["login"]);
         $reponse.=sprintf("                            <td>%s</td>\n", $value["nom"]);
+        $reponse.=sprintf("                            <td>%s</td>\n", $value["mail"]);
         $reponse.=sprintf("                            <td>%s</td>\n", $value["motpass"]);
         $reponse.=sprintf("                            <td>%s</td>\n", $value["autority"]);
+        if ($value["autority"] != 317) {
+            $reponse.=sprintf("                            <td><a href=\"index.php?SuprrUs&id_us=%s\">Supprimer</a></td>\n", $value["id"]);
+        }
+
         $reponse.= "                        </tr>\n";
     }
 
@@ -244,3 +270,5 @@ function adminPannel(){
 ?>
 
 <!-- substr('abcdef', 0, 8) -->
+
+<!-- echo password_hash("testest", PASSWORD_DEFAULT); -->

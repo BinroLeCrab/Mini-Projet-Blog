@@ -118,6 +118,43 @@ function traitecomment($id_billet, $content, $id_user) {
     return 'location:index.php?id_billet='.$id_billet;   
 }
 
+function traiteinscription($login, $mdp, $name, $mail, $mdpclair) {
+
+    try
+    {
+        $db = new PDO(dsn, user, pwd);
+    }
+    catch (PDOException $e)
+    {
+        die("Erreur à l'ouverture ! :".$e->getmessage());
+    }
+
+    $stmt=$db->prepare('SELECT * FROM utilisateurs WHERE login = :logi /*and mot_de_passe = :mdp*/;');
+    $stmt->bindValue(':logi', $login);
+    // $stmt->bindValue(':mdp', $mdp);
+
+    $stmt->execute();
+
+    if($stmt->rowCount()){
+        return 'location:index.php?newuser&errlog='.$login;
+
+    } else {
+        
+        $add = $db->prepare("INSERT INTO utilisateurs (login, mail, motpass, nom) VALUES (:log, :mail, :mdp, :name);");
+        $add->bindValue(':log',$login);
+        $add->bindValue(':mail',$mail);
+        $add->bindValue(':mdp',$mdp);
+        $add->bindValue(':name',$name);
+
+        $add->execute();
+
+        //fermer
+        $db = null;
+    }
+
+    return traitelogin($login, $mdpclair);   
+}
+
 function supprBillet($id_billet, $org) {
 
     try
@@ -339,6 +376,28 @@ function supprComment($id_comment, $org) {
         return 'location:index?adminPan';
     }
     
+}
+
+function supprUser($id) {
+
+    try
+    {
+        $db = new PDO(dsn, user, pwd);
+    }
+    catch (PDOException $e)
+    {
+        die("Erreur à l'ouverture ! :".$e->getmessage());
+    }
+
+    //requeter
+    $stmt = $db->prepare("DELETE FROM utilisateurs WHERE id = :id;");
+    $stmt->bindValue(':id',$id);
+
+    $stmt->execute();
+
+    //fermer
+    $db = null;
+    return 'location:index?adminPan';
 }
 
 ?>

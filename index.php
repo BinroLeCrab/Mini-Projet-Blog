@@ -53,6 +53,20 @@
 
                     echo formConnexion();
 
+                } else if (isset($_GET["newuser"])) {
+
+                    echo formInscription();
+
+                    if (isset($_GET["errlog"])) {
+                        echo '<p class="error">Le login "'.$_GET["errlog"].'" est déjà utilisé.</p>';
+                    }
+
+                } else if (isset($_GET["incription"])) {
+
+                    $mdp = password_hash($_POST["mdp"], PASSWORD_DEFAULT); 
+
+                    header(traiteinscription($_POST["login"], $mdp, $_POST['name'], $_POST['mail'], $_POST["mdp"]));
+
                 } else if (isset($_GET["logerr"])) {
 
                     echo 'les problèmes ...';
@@ -101,6 +115,15 @@
                         } else {
                             header(supprBillet($_GET['id_billet'], 1));
                         }
+                    } else {
+                        header('location:index.php');
+                    }
+
+                } else if (isset($_GET['SuprrUs']) && isset($_GET['id_us']) && isset($_SESSION['user'])){
+
+                    if ($_SESSION['user']['autority'] == 317) {
+                        echo "<p>le user ".$_GET['id_us']."</p>\n";
+                        header(supprUser($_GET['id_us']));
                     } else {
                         header('location:index.php');
                     }
