@@ -21,6 +21,16 @@ p, a {
     color: red;
 }
 
+.suppr {
+    color: rgb(9, 9, 145);
+    font-size: 0.8rem;
+    transition: 0.3s;
+}
+
+.suppr:hover {
+    color: red;
+}
+
 /** -----------------------NAV--------------------- */
 
 nav {
@@ -113,13 +123,16 @@ main {
 }
 
 .Billet {
-    background-color: #fff9f2;
+    background-color: #e9c69c;
+    padding: 18px 21px;
+    margin: 30px 0px;
 }
 
 .BilletCards {
     display: block;
     text-decoration: none;
-    background-color: #fff9f2;
+    background-color: #e9c69c;
+    max-width: 1200px;
 }
 
 textarea {
@@ -138,4 +151,25 @@ td, th {
 
 #comment {
     display: none;
+}
+
+.commentaires > * {
+    margin: 10px 0px;
+}
+
+.com {
+    background-color: #cebca5;
+    padding: 5px 10px;
+    margin: 5px 0px;
+    max-width: 1200px;
+}
+
+.Add {
+    color: rgb(9, 9, 145);
+    font-size: 0.8rem;
+    transition: 0.3s;
+}
+
+.Add:hover {
+    color: green;
 }

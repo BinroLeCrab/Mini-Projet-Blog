@@ -145,12 +145,6 @@
 
                 } else {
 
-                    echo "<h1>Le blog !</h1>\n";
-                    
-                    if (isset($_SESSION["user"])) {
-                        echo "<h2>Bonjour ".$_SESSION["user"]["nom"]."</h2>\n";
-                    }
-
                     if (isset($_GET['newBi']) && (isset($_SESSION["user"]) && ($_SESSION['user']['autority'] == 317))){
 
                         echo formBillet();
@@ -169,7 +163,11 @@
                         echo echoArchive();
 
                     } else {
-                        
+                        echo "<h1>Le blog !</h1>\n";
+                    
+                        if (isset($_SESSION["user"])) {
+                            echo "<h2>Bonjour ".$_SESSION["user"]["nom"]."</h2>\n";
+                        }
                         echo echoListeBillet();
                     }
 
