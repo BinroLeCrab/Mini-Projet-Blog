@@ -63,6 +63,7 @@ function formulaireComm($id) {
 
 function echoListeBillet() {
     $reponse= "";
+    $reponse.= "<p>Les 3 derniers billets publiés :</p>\n";
     $reponse.= "<section>\n";
     $billets = billetListeAcc();
     foreach ($billets as $billet) {
@@ -77,6 +78,7 @@ function echoListeBillet() {
     }
 
     $reponse.= "</section>\n";
+    $reponse.= "<a href=\"index.php?archive\">Voir tout les billets</a>\n";
 
     return $reponse;
 }
@@ -84,6 +86,7 @@ function echoListeBillet() {
 function echoArchive() {
     $reponse= "";
     $reponse.= "<h1>Archives</h1>\n";
+    $reponse.= "<p>Les billets du plus récent au plus ancien.</p>\n";
     $reponse.= "<section>\n";
     $billets = billetListe();
     foreach ($billets as $billet) {
@@ -150,7 +153,7 @@ function echoBillet($id) {
         $reponse.= formulaireComm($id);
 
     } else {
-        $reponse.="<p>Vous devez être <a id=\"co\" href=\"index.php?conn\">connecter</a> pour commenter ce Billet</p>\n";
+        $reponse.="<p>Vous devez être <a href=\"index.php?conn\">connecter</a> pour commenter ce Billet</p>\n";
     }
 
     $reponse.= "</section>\n";
