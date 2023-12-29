@@ -1,12 +1,7 @@
 <?php
 
 // session_start();
-
-const db = "tp_mini_projet_blog";
-const host = "localhost";
-const user = "root";
-const pwd = "";
-const dsn = "mysql:host=".host.";dbname=".db;
+require_once("./log/log.php");
 
 function coucou() {
     $_SESSION["test"] = 'bleu';

@@ -271,4 +271,4 @@ function adminPannel(){
 
 <!-- substr('abcdef', 0, 8) -->
 
-<!-- echo password_hash("testest", PASSWORD_DEFAULT); -->
+<!-- echo password_hash("", PASSWORD_DEFAULT); -->
