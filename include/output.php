@@ -83,6 +83,7 @@ function echoListeBillet() {
 
 function echoArchive() {
     $reponse= "";
+    $reponse.= "<h1>Archives</h1>\n";
     $reponse.= "<section>\n";
     $billets = billetListe();
     foreach ($billets as $billet) {
@@ -148,7 +149,10 @@ function echoBillet($id) {
 
         $reponse.= formulaireComm($id);
 
+    } else {
+        $reponse.="<p>Vous devez être <a id=\"co\" href=\"index.php?conn\">connecter</a> pour commenter ce Billet</p>\n";
     }
+
     $reponse.= "</section>\n";
 
     return $reponse;
